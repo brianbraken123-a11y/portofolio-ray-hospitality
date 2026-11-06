@@ -10,7 +10,7 @@ index.html   # semua konten (semantic HTML, meta OG, JSON-LD Person)
 style.css    # tema dark: navy #0F172A, cream #F5F1E8, amber #F59E0B
 script.js    # reveal on scroll, count-up, garis timeline
 assets/
-  foto-ray.webp                # 520×520, dari foto CV (latar dipindah ke navy)
+  foto-ray.webp                # 760×760, crop kepala–bahu dari foto studio terbaru
   Ryan-Hidayat-Taylor-CV.pdf   # file CV untuk tombol unduh
   og-image.png                 # 1200×630 untuk preview share
   favicon.svg
@@ -39,8 +39,9 @@ Build Command: kosong, Output Directory: kosong (root). Deploy.
    Ganti sesuai paket yang benar-benar kamu tawarkan.
 2. **Deskripsi konsultan King Dimsum (2023)** — dua poin di sana ditulis umum;
    kalau ada hasil konkret (mis. kenaikan penjualan), ganti dengan angka.
-3. **Foto** — `assets/foto-ray.webp` diambil dari foto CV. Kalau ada foto
-   profesional yang lebih natural, ganti dengan rasio 1:1, minimal 600×600.
+3. **Foto** — `assets/foto-ray.webp` = crop kepala–bahu (rasio 1:1, 760×760)
+   dari foto studio full-body terbaru. Kalau ada foto close-up yang lebih baik,
+   ganti dengan rasio 1:1 minimal 600×600.
 4. **Domain** — setelah punya domain, tambahkan `canonical`, `og:url`, dan `sitemap.xml`.
    Saat ini sengaja belum dipasang karena domain belum ada.
 5. **itsme-ray.vercel.app** — link portofolio lain di bagian kontak; hapus barisnya
@@ -48,6 +49,8 @@ Build Command: kosong, Output Directory: kosong (root). Deploy.
 
 ## Catatan teknis
 
-- Animasi dimatikan total saat `prefers-reduced-motion: reduce`.
+- Animasi: fade-in hero, cincin amber berputar, foto mengambang, glow bergerak,
+  count-up angka, garis timeline, dot pop, kilau tombol, stagger reveal.
+  Semua dimatikan total saat `prefers-reduced-motion: reduce`.
 - Konten tetap terlihat walau JS gagal (state sembunyi hanya aktif setelah class `.js`).
 - Kontras teks terendah 7.6:1 (target WCAG AA 4.5:1).

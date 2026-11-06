@@ -22,10 +22,17 @@
     revealAll();
   } else {
     var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-in");
-        io.unobserve(entry.target);
+      var shown = entries.filter(function (e) { return e.isIntersecting; });
+      shown.forEach(function (entry, i) {
+        var el = entry.target;
+        // stagger ringan: elemen yang muncul bersamaan masuk bergiliran
+        var delay = Math.min(i, 3) * 80;
+        if (delay) el.style.transitionDelay = delay + "ms";
+        el.classList.add("is-in");
+        io.unobserve(el);
+        if (delay) {
+          window.setTimeout(function () { el.style.transitionDelay = ""; }, delay + 800);
+        }
       });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
 

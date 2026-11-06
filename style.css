@@ -119,8 +119,23 @@ ul { margin: 0; padding: 0; list-style: none; }
   color: var(--muted);
 }
 
-.nav a { transition: color 0.25s var(--ease); }
+.nav a { position: relative; transition: color 0.25s var(--ease); }
 .nav a:hover { color: var(--cream); }
+
+.nav a:not(.nav__cta)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -5px;
+  height: 1px;
+  background: var(--amber);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.3s var(--ease);
+}
+.nav a:not(.nav__cta):hover::after,
+.nav a:not(.nav__cta):focus-visible::after { transform: scaleX(1); }
 
 .nav__cta {
   color: var(--amber);
@@ -133,35 +148,105 @@ ul { margin: 0; padding: 0; list-style: none; }
 /* ---------------- hero ---------------- */
 
 .hero {
+  position: relative;
+  overflow: hidden;
   padding-block: clamp(2.5rem, 7vw, 5rem) clamp(2rem, 5vw, 3.5rem);
   background:
     radial-gradient(circle at 78% 12%, rgba(245, 158, 11, 0.10), transparent 55%),
     radial-gradient(circle at 8% 88%, rgba(245, 158, 11, 0.06), transparent 50%);
 }
 
+/* cahaya amber yang bergerak lambat di belakang hero */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 66% 34%, rgba(245, 158, 11, 0.13), transparent 52%);
+  animation: heroGlow 16s ease-in-out infinite alternate;
+}
+
+@keyframes heroGlow {
+  from { transform: translate3d(-4%, -2%, 0) scale(1); opacity: 0.75; }
+  to   { transform: translate3d(6%, 4%, 0) scale(1.12); opacity: 1; }
+}
+
 .hero__inner {
+  position: relative;
+  z-index: 1;
   display: grid;
-  grid-template-columns: 180px minmax(0, 1fr);
+  grid-template-columns: 208px minmax(0, 1fr);
   gap: clamp(1.5rem, 4vw, 3rem);
   align-items: center;
 }
 
 .hero__photo {
   position: relative;
-  width: 180px;
+  width: 208px;
   justify-self: start;
+  animation: floaty 7s ease-in-out infinite;
+}
+
+/* cincin amber yang berputar pelan */
+.hero__photo::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg,
+    rgba(245, 158, 11, 0) 0deg,
+    rgba(245, 158, 11, 0.35) 26deg,
+    rgba(245, 158, 11, 1) 52deg,
+    rgba(245, 158, 11, 0) 96deg,
+    rgba(245, 158, 11, 0) 360deg);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px));
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.55));
+  animation: ringSpin 9s linear infinite;
+}
+
+/* pendar lembut di belakang foto */
+.hero__photo::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  z-index: -1;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.35), transparent 68%);
+  filter: blur(18px);
+  animation: glowPulse 5.5s ease-in-out infinite;
+}
+
+@keyframes ringSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.45; transform: scale(0.96); }
+  50% { opacity: 0.9; transform: scale(1.04); }
 }
 
 .hero__photo img {
-  width: 180px;
+  position: relative;
+  z-index: 1;
+  width: 208px;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 50%;
-  border: 2px solid rgba(245, 158, 11, 0.5);
-  box-shadow: 0 0 0 8px rgba(245, 158, 11, 0.07);
-  transition: transform 0.5s var(--ease);
+  border: 2px solid rgba(245, 158, 11, 0.55);
+  box-shadow: 0 0 0 8px rgba(245, 158, 11, 0.07), 0 18px 40px rgba(0, 0, 0, 0.35);
+  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
 }
-.hero__photo img:hover { transform: scale(1.02); }
+.hero__photo img:hover {
+  transform: scale(1.035);
+  box-shadow: 0 0 0 10px rgba(245, 158, 11, 0.1), 0 22px 46px rgba(0, 0, 0, 0.4);
+}
 
 .eyebrow {
   font-size: 0.78rem;
@@ -199,6 +284,8 @@ ul { margin: 0; padding: 0; list-style: none; }
 /* ---------------- buttons ---------------- */
 
 .btn {
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -212,6 +299,22 @@ ul { margin: 0; padding: 0; list-style: none; }
   transition: transform 0.25s var(--ease), background-color 0.25s var(--ease),
               border-color 0.25s var(--ease), color 0.25s var(--ease);
 }
+
+/* kilau tipis yang menyapu tombol saat di-hover */
+.btn::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: -140%;
+  width: 55%;
+  height: 140%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.42), transparent);
+  transform: skewX(-18deg);
+  transition: left 0.6s var(--ease);
+  pointer-events: none;
+}
+.btn:hover::after,
+.btn:focus-visible::after { left: 135%; }
 
 .btn--primary {
   background: var(--amber);
@@ -248,9 +351,14 @@ ul { margin: 0; padding: 0; list-style: none; }
   border-radius: var(--radius);
   padding: 1.15rem 1.1rem;
   background: linear-gradient(180deg, rgba(245, 158, 11, 0.04), transparent 70%);
-  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease);
+  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease),
+              box-shadow 0.3s var(--ease);
 }
-.stat:hover { transform: translateY(-4px); border-color: var(--amber); }
+.stat:hover {
+  transform: translateY(-4px);
+  border-color: var(--amber);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(245, 158, 11, 0.12) inset;
+}
 
 .stat__num {
   display: block;
@@ -335,7 +443,16 @@ section[id] { scroll-margin-top: 82px; }
   border: 2px solid var(--line);
   transition: border-color 0.3s var(--ease), background-color 0.3s var(--ease);
 }
-.job.is-in::before { border-color: var(--amber); background: var(--amber); }
+.job.is-in::before {
+  border-color: var(--amber);
+  background: var(--amber);
+  animation: dotIn 0.55s var(--ease) both;
+}
+
+@keyframes dotIn {
+  from { transform: scale(0.35); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.55); }
+  to   { transform: scale(1); box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+}
 
 .job__when {
   font-size: 0.82rem;
@@ -395,9 +512,14 @@ section[id] { scroll-margin-top: 82px; }
   border-radius: var(--radius);
   padding: 1.4rem 1.35rem;
   background: var(--card);
-  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease);
+  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease),
+              box-shadow 0.3s var(--ease);
 }
-.skill-card:hover { transform: translateY(-4px); border-color: var(--amber); }
+.skill-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--amber);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.3);
+}
 
 .skill-card h3 {
   font-size: 1.1rem;
@@ -454,9 +576,14 @@ section[id] { scroll-margin-top: 82px; }
   border-radius: var(--radius);
   padding: clamp(1.35rem, 3vw, 1.9rem);
   background: var(--card);
-  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease);
+  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease),
+              box-shadow 0.3s var(--ease);
 }
-.help-card:hover { transform: translateY(-4px); border-color: var(--amber); }
+.help-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--amber);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.3);
+}
 
 .help-card__tag {
   font-size: 0.76rem;
@@ -579,7 +706,10 @@ section[id] { scroll-margin-top: 82px; }
 .js .hero__text .anim-hero:nth-child(3) { animation-delay: 0.21s; }
 .js .hero__text .anim-hero:nth-child(4) { animation-delay: 0.29s; }
 .js .hero__text .anim-hero:nth-child(5) { animation-delay: 0.37s; }
-.js .hero__photo.anim-hero { animation-delay: 0s; }
+.js .hero__photo.anim-hero {
+  /* fade-in hero + napas mengambang (transform dipakai animasi kedua) */
+  animation: heroIn 0.6s var(--ease) both, floaty 7s ease-in-out 0.9s infinite;
+}
 
 @keyframes heroIn {
   to { opacity: 1; transform: none; }
@@ -593,7 +723,7 @@ section[id] { scroll-margin-top: 82px; }
     justify-items: start;
   }
   .hero__photo,
-  .hero__photo img { width: 132px; }
+  .hero__photo img { width: 150px; }
   .stats__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .skills { grid-template-columns: 1fr; }
   .help { grid-template-columns: 1fr; }
